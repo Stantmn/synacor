@@ -46,7 +46,6 @@ describe('Weather', () => {
     describe('Getting a Weather data', () => {
         it('Send async request to API',  async () => {
             weatherData = await weather.getWeather({latitude: ip.latitude, longitude: ip.longitude});
-            console.log(weatherData);
         });
 
         it('Is an object',() => {
