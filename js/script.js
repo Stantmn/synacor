@@ -1,12 +1,11 @@
 import { Weather } from "./weather.js";
 
+const weather = new Weather();
+
 window.onload = function() {
     main();
 };
 
 const main = async () => {
-    const weather = new Weather();
-    await weather.getIp();
-    await weather.getWeather();
-    await weather.setData();
+    await weather.showWeather();
 };

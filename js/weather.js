@@ -1,47 +1,53 @@
 'use strict';
-import {Constants} from "./constants.js";
+import { Constants } from "./constants.js";
 
 export class Weather {
 
-    constructor(){
-        this.ip = {};
-        this.weatherData = {};
+    async showWeather() {
+        try{
+            // We use async/await or can use chain of promises
+            const ip = await this.getIp();
+            const weatherData = await this.getWeather(ip);
+            await this.setData(weatherData);
+        } catch (e) {
+            console.log(`Can't show a weather`);
+            throw e;
+        }
     }
 
     async getIp() {
-        // We use async/await or can use chain of promises
         try {
-            this.ip = await getData('ip');
+            return await getData('ip');
         } catch (e) {
-            console.log(`Can't load coordinates`);
+            console.log(`Can't load a coordinates`);
             throw e;
         }
     };
 
-    async getWeather() {
+    async getWeather(ip) {
         try {
-            this.weatherData = await getData(`weather/${this.ip.latitude},${this.ip.longitude}`);
+            return await getData(`weather/${ip.latitude},${ip.longitude}`);
         } catch (e) {
-            console.log(`Can't load weather`);
+            console.log(`Can't load a weather`);
             throw e;
         }
     };
 
-    async setData() {
+    async setData(weatherData) {
 
         const icon = document.querySelector('#image');
-        icon.src = `http://openweathermap.org/img/w/${this.weatherData.weather[0].icon}.png`;
+        icon.src = `http://openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
 
         // It's not safety to use innerHtml will use textContent
         const city = document.querySelector('#city');
-        city.textContent = this.weatherData.name;
+        city.textContent = weatherData.name;
 
         // Not sure what measurements
         const temp = document.querySelector('#temp');
-        temp.textContent = (this.weatherData.main.temp | 0) + temp.textContent;
+        temp.textContent = (weatherData.main.temp | 0) + temp.textContent;
 
         const conditions = document.querySelector('#conditions');
-        conditions.textContent = this.weatherData.weather[0].description;
+        conditions.textContent = weatherData.weather[0].description;
     }
 }
 
